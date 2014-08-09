@@ -1,6 +1,5 @@
 module.exports = (function(){
   var Flexup,
-      Pattern = require('./pattern.js'),
       Library = require('./library.js'),
       doc;
 
@@ -11,10 +10,9 @@ module.exports = (function(){
   }
 
   Flexup.prototype.read = function(){
-    for(var key in this.definitions){
-      var pattern = new Pattern(key, this.definitions[key]);
-      this.library.add(pattern);
-    }
+    var defs = this.definitions;
+    for(var key in defs)
+      this.library.add(key, defs[key]);
     return this.library.execute(this.doc);
   }
 

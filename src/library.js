@@ -1,19 +1,44 @@
 module.exports = (function(){
+  var Pattern    = require('./pattern.js'),
+      RegexMatch = require('./regex_match.js');
+
   var Library = function(){
     this.items = [];
   };
 
-  Library.prototype.add = function(item){
-    this.items.push(item);
+  Library.prototype.add = function(name, pattern){
+    this.items.push(new Pattern(name, pattern));
+  }
+
+  Library.prototype.toRegex = function(){
+    var reg = this.items.map(function(e){
+      return e.toRegexString();
+    });
+    reg = reg.join('|');
+    //reg = '/' + reg + '/';
+    return new RegExp(reg, 'g');
   }
 
   Library.prototype.execute = function(doc){
-    for(var i=0; i<this.items.length; i++){
-      var pattern = this.items[i];
-      doc = pattern.execute(doc);
+    var m, regex, tag;
+
+    regex = this.toRegex();
+
+    while((m = regex.exec(doc)) !== null){
+      match = new RegexMatch(m);
+      tag = this.atIndex(match.getPatternIndex() - 1).name;
+      doc = match.apply(doc, tag);
     }
+
     return doc;
   }
 
+
+  Library.prototype.atIndex = function(n){
+    return this.items[n];
+  }
+
+
   return Library;
 })();
+
