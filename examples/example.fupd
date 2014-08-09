@@ -1,12 +1,6 @@
-define('bold',      '**%**');
-define('em',        '*%*');
-define('underline', '__%__');
-define('quote', '`%`');
-
-
-//defineWrap('**');
-
-// Or maybe we can allow straight up regex
-// define('bold', '/\*\*(.+)\*\*/')
-
-
+{
+  "bold"      :  "**%**",
+  "em"        :  "*%*",
+  "underline" :  "__%__",
+  "quote"     :  "`%`"
+}
