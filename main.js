@@ -1,15 +1,52 @@
-var fs     = require('fs'),
-    Flexup = require('./src/flexup.js');
+var Main = (function(){
+  var fs     = require('fs'),
+      Flexup = require('./src/flexup.js');
 
-var definitions,
-    contents,
-    result;
+  var Main = function(fup, fupd){
+    var flexup;
+
+    if(typeof fup === 'undefined')
+      fup  = read_file_arg('fup',    2);
+    else
+      fup  = read_file(fup);
+
+    if(typeof fupd === 'undefined')
+      fupd = read_file_arg('fupd', 3);
+    else
+      fupd = read_file(fupd);
+
+    if(fup && fupd){
+      flexup = new Flexup(fup, fupd);
+      console.log(flexup.read());
+    }
+  }
 
 
-definitions = fs.readFileSync('examples/example.fupd', 'utf-8');
-contents    = fs.readFileSync('examples/example.fup', 'utf-8');
-flexup      = new Flexup(contents, definitions);
+  function read_file_arg(name, n){
+    var src;
+    if(process.argv.length > n){
+      src = process.argv[n];
+      return read_file(src);
+    }
+    else{
+      console.log("MISSING ARGUMENT ("+(n-2)+"): " + name);
+      return false;
+    }
+  }
+
+  function read_file(path){
+    var body = fs.readFileSync(path, 'utf-8');
+    return body;
+  }
+
+  return Main;
+})();
 
 
 
-console.log(flexup.read());
+
+// TODO: Hard-coded for convenience :)
+if(process.argv.length < 3)
+  Main("./examples/example.fup", "./examples/example.fupd");
+else
+  Main();
