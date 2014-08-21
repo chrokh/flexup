@@ -10,9 +10,7 @@ module.exports = (function(){
   }
 
   Flexup.prototype.read = function(){
-    var defs = this.definitions;
-    for(var key in defs)
-      this.library.add(key, defs[key]);
+    this.library.addMany(this.definitions);
     return this.library.execute(this.doc);
   }
 

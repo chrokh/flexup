@@ -6,9 +6,14 @@ module.exports = (function(){
     this.items = [];
   };
 
+  Library.prototype.addMany = function(defs){
+    for(var key in defs)
+      this.add(key, defs[key]);
+  };
+
   Library.prototype.add = function(name, pattern){
     this.items.push(new Pattern(name, pattern));
-  }
+  };
 
   Library.prototype.toRegex = function(){
     var reg = this.items.map(function(e){
