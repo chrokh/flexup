@@ -11,7 +11,7 @@
 "**"            return 'TAG'
 "--"            return 'TAG'
 "-"             return 'TAG'
-([A-Za-z]+)     return 'TAG'
+([A-Za-z]+)     return 'TEXT'
 <<EOF>>         return 'EOF'
 
 /lex
@@ -30,21 +30,28 @@
 %% /* language grammar */
 
 file
-    : expr EOF
+    : statements EOF
         {return $1.split(','); }
     ;
 
-expr
-    : term
-        { $$ = String($1); }
-    | term expr
-        { $$ = String($1) + ',' + $2; }
+statements
+    : expr            { $$ = String($1); }
+    | expr statements { $$ = String($1) + ',' + $2; }
     ;
 
-term
-    : TAG   { $$ = String($1); }
-    | TEXT  { $$ = String($1); }
-    | OPEN  { $$ = String($1); }
-    | CLOSE { $$ = String($1); }
+expr
+    : text { $$ = String($1); }
+    | elem { $$ = $1 ; }
+    | tag { $$ = $1 ; }
     ;
+
+elem
+    : open statements close { $$ = $1 + ',' + $2 + ',' + $3; }
+    | open close { $$ = $1 + ',' + $2; }
+    ;
+
+open  : OPEN   { $$ = String($1); };
+close : CLOSE  { $$ = String($1); };
+text  : TEXT   { $$ = String($1); };
+tag   : TAG    { $$ = String($1); };
 
