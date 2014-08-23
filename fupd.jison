@@ -23,7 +23,57 @@
 
 file
     : statements EOF
-        { return $1; }
+        %{ 
+            var ast, lex, bnf;
+
+            ast = $1;
+            lex = lexify(ast);
+            bnf = bnfify(lex);
+
+            function lexify(ast){
+                var lex = [];
+
+                ast.forEach(function(pattern){
+                    pattern.tokens.forEach(function(tok){
+                        var type = tok.type + '-' + pattern.name.toUpperCase();
+                        lex.push([tok.token, type]);
+                    });
+                });
+
+                return lex;
+            }
+
+            function bnfify(lex){
+                var bnf = [];
+                
+                lex.forEach(function(tok){
+                    var type = tok[1].substring(0, tok[1].indexOf('-'));
+
+                    if(type == 'OPEN' || type == 'CLOSE'){
+                        var prod, open, close, produced;
+
+                        prod = {};
+
+                        prod.elem = [
+                            'open statements close { \$\$ = $1 + "," + $2 + "," + $3; }',
+                            'open close { \$\$ = $1 + "," + $2; }'
+                        ];
+                        bnf.push(prod);
+                    }
+                });
+
+                return bnf;
+            }
+
+            var ret = {
+                ast: ast,
+                lex: lex,
+                bnf: bnf
+            };
+
+            console.log(JSON.stringify(ret, null, 4));
+            return ast;
+        }%
     ;
 
 statements
