@@ -31,7 +31,8 @@ statements
 expr
     : text       { $$ = $1; }
     | elem       { $$ = $1; }
-    | pair-bold  { $$ = $1; };
+    | pair-bold  { $$ = $1; }
+    | pair-emph  { $$ = $1; };
 
 elem
     : open statements close { $$ = [$1,$2,$3].join(','); }
@@ -39,6 +40,9 @@ elem
 
 pair-bold
     : bold non-bold-statements bold { $$ = [$1,$2,$3].join(','); };
+
+pair-emph
+    : emph non-emph-statements emph { $$ = [$1,$2,$3].join(','); };
 
 
 
@@ -53,8 +57,26 @@ non-bold-expr
     | non-bold-elem   { $$ = $1; };
 
 non-bold-elem
-    : open non-bold-statements close { $$ = [$1,$2,$3].join(','); }
-    | open close { $$ = [$1,$2].join(','); };
+    : elem { $$ = $1; }
+    | pair-emph  { $$ = $1; };
+
+
+
+
+/* non-emph */
+
+non-emph-statements
+    : non-emph-expr                     { $$ = $1; }
+    | non-emph-expr non-emph-statements { $$ = [$1, $2].join(','); };
+
+non-emph-expr
+    : text            { $$ = $1; }
+    | non-emph-elem   { $$ = $1; };
+
+non-emph-elem
+    : elem { $$ = $1; }
+    | pair-bold  { $$ = $1; };
+
 
 
 
@@ -62,3 +84,4 @@ open  : OPEN   { $$ = String($1); };
 close : CLOSE  { $$ = String($1); };
 text  : TEXT   { $$ = String($1); };
 bold  : BOLD   { $$ = String($1); };
+emph  : EMPH   { $$ = String($1); };
