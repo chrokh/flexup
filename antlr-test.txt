@@ -1,0 +1,54 @@
+/*
+ This actually works in ANTLR
+*/
+
+grammar test;
+options {
+  output=AST;
+}
+
+tokens{
+  ROOT;
+  ELEM;
+}
+
+/* This will be the entry point of our parser. */
+eval
+    :    elem -> ^(ROOT  elem)
+    ;
+
+/* ?-rule might be a syntactic predicate */
+/* http://en.wikipedia.org/wiki/Syntactic_predicate */
+/* instead of backtrack=true in options */
+mixed
+  : (elem)? mixed -> elem mixed
+  | text mixed    -> text mixed
+  | text          -> text
+  ;
+
+elem
+  : tag mixed tag -> ^(ELEM mixed)
+  | tag tag       -> ^(ELEM)
+  ;
+
+
+tag : '*';
+
+
+text
+  : Text
+  ;
+
+
+/*
+ * Lexer rules
+ */
+Text  :  '0'..'9'+;
+
+
+
+/* We're going to ignore all white space characters */
+/*WS  
+    :   (' ' | '\t' | '\r'| '\n') {$channel=HIDDEN;}
+    ;*/
+    

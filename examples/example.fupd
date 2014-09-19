@@ -1,6 +1,4 @@
-{
-  "bold"      :  "**%**",
-  "em"        :  "*%*",
-  "underline" :  "__%__",
-  "quote"     :  "`%`"
-}
+bold:       **%***
+em:         *%*
+underline:  0%0
+quote:      00%11
