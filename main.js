@@ -5,45 +5,22 @@ var Main = (function(){
   var Main = function(fup, fupd){
     var flexup;
 
-    if(typeof fup === 'undefined')
-      fup  = read_file_arg('fup', 2);
-    else
-      fup  = read_file(fup);
+    fup  = readf(fup)
+    fupd = readf(fupd)
 
-    if(typeof fupd === 'undefined')
-      fupd = read_file_arg('fupd', 3);
-    else
-      fupd = read_file(fupd);
+    flexup = new Flexup(fup, fupd);
+    var xml = flexup.read();
 
-    if(fup && fupd){
-      flexup = new Flexup(fup, fupd);
-      var xml = flexup.read();
-
-      console.log(xml);
-      write_file('first.xml', xml);
-    }
+    console.log(xml);
+    writef('first.xml', xml);
   }
 
-  function write_file(name, contents){
+  function writef(name, contents){
     fs.writeFileSync(('./debug/'+name), contents, 'utf-8');
   }
 
-
-  function read_file_arg(name, n){
-    var src;
-    if(process.argv.length > n){
-      src = process.argv[n];
-      return read_file(src);
-    }
-    else{
-      console.log("MISSING ARGUMENT ("+(n-2)+"): " + name);
-      return false;
-    }
-  }
-
-  function read_file(path){
-    var body = fs.readFileSync(path, 'utf-8');
-    return body;
+  function readf(path){
+    return fs.readFileSync(('./' + path), 'utf-8');
   }
 
   return Main;
@@ -52,8 +29,17 @@ var Main = (function(){
 
 
 
+/*
+ * = = = = = =
+ *    MAIN
+ * = = = = = =
+ */
+ 
 // TODO: Hard-coded for convenience :)
 if(process.argv.length < 3)
-  Main("./examples/trivial.fup", "./examples/example.json");
-else
-  Main();
+  Main("examples/trivial.fup", "examples/basic-fupd.json");
+else{
+  var fup  = process.argv[2].toString();
+  var fupd = process.argv[3].toString();
+  Main(fup, fupd);
+}
