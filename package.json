@@ -1,0 +1,12 @@
+{
+  "name": "flexup",
+  "version": "0.0.1",
+  "description": "",
+  "devDependencies": {
+    "pegjs": "^0.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrokh/flexup.git"
+  }
+}

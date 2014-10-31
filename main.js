@@ -6,7 +6,7 @@ var Main = (function(){
     var flexup;
 
     if(typeof fup === 'undefined')
-      fup  = read_file_arg('fup',    2);
+      fup  = read_file_arg('fup', 2);
     else
       fup  = read_file(fup);
 
@@ -47,6 +47,6 @@ var Main = (function(){
 
 // TODO: Hard-coded for convenience :)
 if(process.argv.length < 3)
-  Main("./examples/example.fup", "./examples/example.fupd");
+  Main("./examples/trivial.fup", "./examples/example.json");
 else
   Main();
