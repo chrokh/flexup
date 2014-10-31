@@ -1,0 +1,36 @@
+\begin{lstlisting}
+{
+  "grammar" : "./[filename].json",
+  "i"      : "./[filename].fup",
+  "o"      : [
+
+    // Raw version
+    "./[raw].xml",
+
+    // Numbered version
+    {
+      "translation" : {
+        "i"  : { "heading": "numberedHeading" },
+        "o"  : {
+
+          "interpretation" : {
+            "i"  : "numbered-headings",  // From public pkg-channel or fall-back to disk
+            "o"  : "./[numbered].xml"
+          }
+        }
+      }
+    }
+  ]
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+flexup.in("./[document].fup")
+  .pipe(grammar("./[fupd].json"))              // parse custom syntax
+  .out("./[raw].xml")                          // write to file as raw flXML
+  .pipe(translation({                          // translate the document
+    "heading" : "numberedHeading"}))                    
+  .pipe(interpretation("numbered-headings"))   // add numbers, using package
+  .out("./[numbered].xml");                    // write to file as numbered flXML
+\end{lstlisting}
+
