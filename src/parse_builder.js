@@ -17,8 +17,6 @@ module.exports = (function(){
     ];
     this._addAllProductionsFromFUPD();
 
-    console.log(this._grammar.join('\r\n'));
-
     return this._grammar.join('\r\n');
   }
 

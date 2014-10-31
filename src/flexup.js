@@ -3,6 +3,7 @@ module.exports = (function(){
       Library      = require('./library.js'),
       ParseBuilder = require('./parse_builder.js'),
       Parser       = require('./parser.js'),
+      FTree        = require('./ftree.js'),
       doc;
 
   Flexup = function(doc, definitions){
@@ -14,7 +15,9 @@ module.exports = (function(){
   Flexup.prototype.read = function(){
     var parsebuilder = new ParseBuilder(this.definitions);
     var parser = new Parser(parsebuilder.getParser());
-    return parser.parse(this.doc);
+    var ast = parser.parse(this.doc);
+    var ftree = new FTree(ast);
+    return ftree.getFlxML();
 
     //this.library.addMany(this.definitions);
     //return this.library.execute(this.doc);

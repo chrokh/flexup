@@ -1,0 +1,14 @@
+start
+  = (element / str)*
+
+element
+= t:STag c:content ETag {return {t:c};}
+
+content
+= (element / str)*
+
+
+STag = "*"
+ETag = "/*"
+
+str = s:[a-zA-Z ]+   {return s.join("");}
