@@ -17,8 +17,15 @@ var Main = (function(){
 
     if(fup && fupd){
       flexup = new Flexup(fup, fupd);
-      console.log(flexup.read());
+      var xml = flexup.read();
+
+      console.log(xml);
+      write_file('first.xml', xml);
     }
+  }
+
+  function write_file(name, contents){
+    fs.writeFileSync(('./debug/'+name), contents, 'utf-8');
   }
 
 
