@@ -11,7 +11,7 @@ module.exports = (function(){
 
   ParseBuilder.prototype._getGrammar = function(){
     this._grammar = [
-      'start   = (element / str)*',
+      'start   = content',
       'content = (element / str)*',
       "str     = s:[a-zA-Z \\n]+   {return s.join('');}"
     ];
