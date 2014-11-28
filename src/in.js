@@ -18,6 +18,14 @@ module.exports = (function(){
       this._contents = action.translate(this._contents);
     }
 
+    else if(typeof action.interpretate != 'undefined'){
+      this._contents = action.interpretate(this._contents);
+    }
+
+    else{
+      throw "Unknown pipe";
+    }
+
     return this;
   }
 
