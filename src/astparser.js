@@ -1,6 +1,6 @@
 module.exports = (function(){
 
-  var FlxTree = function(node){
+  var ASTParser = function(node){
     if(node.length !== undefined && typeof node === 'object'){
       this._parseArray(node);
     }else if(typeof node === 'object'){
@@ -8,11 +8,13 @@ module.exports = (function(){
     }else if(typeof node === 'string'){
       this._content = node;
     }else{
-      throw "Parse error in flxtree";
+      throw "Could not parse AST";
     }
   }
 
-  FlxTree.prototype.toXML = function(){
+
+
+  ASTParser.prototype.toXML = function(){
     switch(this.type()){
 
       case 'mixed':
@@ -30,12 +32,11 @@ module.exports = (function(){
 
       case 'text':
         return this._content;
-
     }
   }
 
 
-  FlxTree.prototype.type = function(){
+  ASTParser.prototype.type = function(){
     if(this.isMixed()){
       return "mixed";
     }else if(this.isElement()){
@@ -43,22 +44,22 @@ module.exports = (function(){
     }else if(this.isText()){
       return "text"
     }else{
-      throw "Print error in flxtree";
+      throw "Type error in AST parser";
     }
   }
 
-  FlxTree.prototype.isMixed = function(){
+  ASTParser.prototype.isMixed = function(){
     return typeof this._nodes != 'undefined';
   }
 
-  FlxTree.prototype.isElement = function(){
+  ASTParser.prototype.isElement = function(){
     return (
       typeof this._startTag != 'undefined'
       && typeof this._endTag != 'undefined'
       && typeof this._content != 'undefined');
   }
 
-  FlxTree.prototype.isText = function(){
+  ASTParser.prototype.isText = function(){
     return (
       typeof this._content != 'undefined'
       && typeof this._startTag == 'undefined'
@@ -66,18 +67,18 @@ module.exports = (function(){
   }
 
 
-  FlxTree.prototype._parseArray = function(a){
+  ASTParser.prototype._parseArray = function(a){
     this._nodes = [];
     for(var i=0; i<a.length; i++){
-      this._nodes.push(new FlxTree(a[i]));
+      this._nodes.push(new ASTParser(a[i]));
     }
   };
 
   
-  FlxTree.prototype._parseObject = function(obj){
+  ASTParser.prototype._parseObject = function(obj){
     for(var key in obj){
       this._startTag = (key);                   // <foo>
-      this._content  = (new FlxTree(obj[key])); // body
+      this._content  = (new ASTParser(obj[key])); // body
       this._endTag   = (key);                   // </foo>
     }
   };
@@ -99,6 +100,6 @@ module.exports = (function(){
   };
 
 
-  return FlxTree;
+  return ASTParser;
 })();
 

@@ -1,6 +1,5 @@
 module.exports = (function(){
   var
-    FlxTree  = require('./flxtree.js'),
     xpath    = require('xpath'),
     dom      = require('xmldom').DOMParser;
 
@@ -12,18 +11,11 @@ module.exports = (function(){
     }
   }
 
-  Translation.prototype.translate = function(contents){
-    var doc = new dom().parseFromString(contents);
-
+  Translation.prototype.translate = function(tree){
     for(var key in this._json){
-
-      var nodes = xpath.select(key, doc);
-      for(var i=0; i<nodes.length; i++){
-        nodes[i].tagName = this._json[key];
-      }
-      
+      tree.rename(key, this._json[key]);
     }
-    return doc.toString();
+    return tree;
   }
 
 

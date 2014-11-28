@@ -32,8 +32,8 @@ var Main = (function(){
         "//subheading" : "subhead",
         "//heading"    : "head"
       }))
-      .pipe(Flexup.interpretation('./examples/headings-add-numbers.xml'))
       .out('foo');
+      //.pipe(Flexup.interpretation('./examples/headings-add-numbers.xml'))
       /*.pipe(Flexup.translation({
         "subheading" : "h2",
         "." : "p"

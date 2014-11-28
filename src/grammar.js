@@ -1,6 +1,8 @@
 module.exports = (function(){
   var
-    PEG = require('pegjs'),
+    PEG        = require('pegjs'),
+    ASTParser  = require('./astparser.js'),
+    XMLWrapper = require('./xmlwrapper.js'),
     Grammar;
 
   Grammar = function(contents){
@@ -8,7 +10,10 @@ module.exports = (function(){
   }
 
   Grammar.prototype.parse = function(contents){
-    return this._toParser().parse(contents);
+    var ast = this._toParser().parse(contents);
+    var xml = new ASTParser(ast).toXML();
+    var wrapped = new XMLWrapper(xml);
+    return wrapped;
   }
 
   Grammar.prototype._toParser = function(){
