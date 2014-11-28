@@ -1,34 +1,51 @@
 module.exports = (function(){
   var PEG  = require('pegjs');
 
-  var ParseBuilder = function(fupd){
-    this._fupd = fupd;
+  this.build = function(grammar){
+    /*
+     * TODO: ALL OF THIS FILE
+     */
+
+    var json = grammar;
+    var grammar = _buildParser(json);
+    return PEG.buildParser();
   }
 
-  ParseBuilder.prototype.getParser = function(){
-    return PEG.buildParser(this._getGrammar());
-  }
+  /*
+   *
+   * privates
+   *
+   */
 
-  ParseBuilder.prototype._getGrammar = function(){
-    this._grammar = [
+  _buildParser = function(grammar){
+    var basegrammar = [
       'start   = content',
       'content = (element / str)*',
-      "str     = s:[a-zA-Z \\n]+   {return s.join('');}"
+      'str     = s:[a-zA-Z \\n]+   {return s.join(\'\');}'
     ];
-    this._addAllProductionsFromFUPD();
+
+    var prods = _getProductions(basegrammar, grammar);
+    for(var i=0; i<prods.length; i++){
+      basegrammar.push(prods[i]);
+    }
 
     return this._grammar.join('\r\n');
   }
 
-  ParseBuilder.prototype._addAllProductionsFromFUPD = function(nonterminal, terminal){
-    this._addProduction("element", this._getElementProductions());
-    this._addTerminals();
+
+  _getProductions = function(basegrammar, grammar){
+    console.log("getting...", grammar);
+    var nonterminals = _getElementProductions(grammar);
+    console.log("...got!");
+    //this._addProduction("element", this._getElementProductions());
+    //this._addTerminals();
   }
 
-  ParseBuilder.prototype._getElementProductions = function(){
+  var _getElementProductions = function(grammar){
+    console.log(grammar);
     var r = [];
     var i = 1;
-    for(var key in this._fupd){
+    for(var key in grammar){
       r.push("{0} c:content {1} {return {\"{2}\":c};}".supplant([
         ('STag'+i), ('ETag'+i), key]));
       i++;
@@ -36,7 +53,7 @@ module.exports = (function(){
     return r;
   }
 
-  ParseBuilder.prototype._addTerminals = function(){
+  var _addTerminals = function(){
     var i = 1;
     for(var key in this._fupd){
       var value = this._fupd[key],
@@ -49,11 +66,11 @@ module.exports = (function(){
     }
   }
 
-  ParseBuilder.prototype._addTerminal = function(nonterminal, terminal){
+  var _addTerminal = function(nonterminal, terminal){
     this._grammar.push(("{0} = '{1}'".supplant([nonterminal, terminal])));
   }
 
-  ParseBuilder.prototype._addProduction = function(nonterminal, terminals){
+  var _addProduction = function(nonterminal, terminals){
     var expanded = terminals.join(' / ');
     this._grammar.push("{0} = {1}".supplant([nonterminal, expanded]));
   }
@@ -74,6 +91,6 @@ module.exports = (function(){
   };
 
 
-  return ParseBuilder;
+  return this;
 })();
 

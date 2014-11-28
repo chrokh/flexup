@@ -2,28 +2,47 @@ var Main = (function(){
   var fs     = require('fs'),
       Flexup = require('./src/flexup.js');
 
-  var Main = function(fup, fupd){
+  this.Pair = function(fup, fupd){
     var flexup;
 
-    fup  = readf(fup)
-    fupd = readf(fupd)
+    fup  = _readf(fup)
+    fupd = _readf(fupd)
 
     flexup = new Flexup(fup, fupd);
     var xml = flexup.read();
 
     console.log(xml);
-    writef('first.xml', xml);
+    _writef('first.xml', xml);
   }
 
-  function writef(name, contents){
+  function _writef(name, contents){
     fs.writeFileSync(('./debug/'+name), contents, 'utf-8');
   }
 
-  function readf(path){
+  function _readf(path){
     return fs.readFileSync(('./' + path), 'utf-8');
   }
 
-  return Main;
+
+
+  this.Orchestration = function(){
+    Flexup.in("examples/headings-doc.fup")
+      .pipe(Flexup.grammar("examples/headings-fupd.json"))
+      .pipe(Flexup.translation({
+        "//subheading" : "subhead",
+        "//heading"    : "head"
+      }))
+      .out('foo');
+      /*.pipe(Flexup.interpretation("numbered-headings"))
+      .pipe(Flexup.translation({
+        "subheading" : "h2",
+        "." : "p"
+      }))
+      .pipe(Flexup.interpretation("html-wrap"))
+      .out("./[numbered].html");*/
+  }
+
+  return this;
 })();
 
 
@@ -37,9 +56,9 @@ var Main = (function(){
  
 // TODO: Hard-coded for convenience :)
 if(process.argv.length < 3)
-  Main("examples/trivial.fup", "examples/basic-fupd.json");
+  Main.Orchestration();
 else{
   var fup  = process.argv[2].toString();
   var fupd = process.argv[3].toString();
-  Main(fup, fupd);
+  Main.Pair(fup, fupd);
 }
