@@ -35,14 +35,11 @@ var Main = (function(){
       .pipe(Flexup.interpretation('./examples/numbered-headers/add-numbers.js'))
       .pipe(Flexup.translation({
         "//subhead" : "h2",
-        "//head"    : "h1"
+        "//head"    : "h1",
+        ""          : "p"
       }))
       .out('foo');
-      /*.pipe(Flexup.translation({
-        "subheading" : "h2",
-        "." : "p"
-      }))
-      .pipe(Flexup.interpretation("html-wrap"))
+      /*.pipe(Flexup.interpretation("html-wrap"))
       .out("./[numbered].html");*/
   }
 

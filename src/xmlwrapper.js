@@ -24,11 +24,23 @@ module.exports = (function(){
 
 
   XMLWrapper.prototype.rename = function(from, to){
-    var nodes = xpath.select(from, this._xml);
-    
-    for(var i=0; i < nodes.length; i++){
-      // TODO: Dirty
-      nodes[i].tagName = nodes[i].nodeName = nodes[i].localName = to;
+    if(from !== ''){
+      var nodes = xpath.select(from, this._xml);
+      
+      for(var i=0; i < nodes.length; i++){
+        // TODO: Dirty 
+        nodes[i].tagName = nodes[i].nodeName = nodes[i].localName = to;
+      }
+    }else{
+      var nodes = xpath.select('/text()', this._xml);
+      
+      for(var i=0; i < nodes.length; i++){
+        var newElement = this._xml.createElement(to);
+        var newText    = this._xml.createTextNode(nodes[i].data);
+        newElement.appendChild(newText);
+        this._xml.insertBefore(newElement, nodes[i]);
+        nodes[i].parentNode.removeChild(nodes[i]);
+      }
     }
   }
 
