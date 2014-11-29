@@ -33,6 +33,10 @@ var Main = (function(){
         "//heading"    : "head"
       }))
       .pipe(Flexup.interpretation('./examples/headings-add-numbers.js'))
+      .pipe(Flexup.translation({
+        "//subhead" : "h2",
+        "//head"    : "h1"
+      }))
       .out('foo');
       /*.pipe(Flexup.translation({
         "subheading" : "h2",

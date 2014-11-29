@@ -25,9 +25,10 @@ module.exports = (function(){
 
   XMLWrapper.prototype.rename = function(from, to){
     var nodes = xpath.select(from, this._xml);
-
+    
     for(var i=0; i < nodes.length; i++){
-      nodes[i].tagName = to;
+      // TODO: Dirty
+      nodes[i].tagName = nodes[i].nodeName = nodes[i].localName = to;
     }
   }
 
