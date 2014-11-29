@@ -26,13 +26,13 @@ var Main = (function(){
 
 
   this.Orchestration = function(){
-    Flexup.in("examples/headings-doc.fup")
-      .pipe(Flexup.grammar("examples/headings-fupd.json"))
+    Flexup.in("examples/numbered-headers/in.fup")
+      .pipe(Flexup.grammar("examples/numbered-headers/grammar.json"))
       .pipe(Flexup.translation({
         "//subheading" : "subhead",
         "//heading"    : "head"
       }))
-      .pipe(Flexup.interpretation('./examples/headings-add-numbers.js'))
+      .pipe(Flexup.interpretation('./examples/numbered-headers/add-numbers.js'))
       .pipe(Flexup.translation({
         "//subhead" : "h2",
         "//head"    : "h1"
