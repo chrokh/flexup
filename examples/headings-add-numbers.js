@@ -1,39 +1,25 @@
 module.exports = (function(){
-  var
-    xpath = require('xpath'),
-    dom   = require('xmldom').DOMParser;
 
-  /*this.interpretate = function(contents){
-    var xml = new dom().parseFromString(contents);
 
-    var heads = xpath.select('/head/text()', xml);
-    for(var i=0; i<heads.length; i++){
-      heads[i].textValue = "foo";
-    }
+  this.interpretate = function(tree){
 
-    var heads = xpath.select('/head/text()', xml);
-    for(var i=0; i<heads.length; i++){
-      console.log(heads[i].data);
-    }
-
-    return xml.toString() 
-  };*/
-
-  this.interpretate = function(){
-    var n = 0;
-
-  // API:
-  // contents.append
-  // contents.prepend
-  // contents.insert
-  // contents.change
-  // contents.remove
-
-    contents.change('//heading', function(text){
-      return (n++) + ')' + node.text;
+    tree.map('//heading/text()', function(node){
+      return (node.index+1) + '.' + node.text();
     });
+
+    tree.map('//subheading/text()', function(node){
+      // TODO: Would be better...
+      // var h1  = node.preceding('heading');
+      // var old = h1.first().preceding('subheading');
+
+      var i   = node.index + 1;
+      var h1  = tree.count('//subheading[position()='+(i)+']/preceding-sibling::heading');
+      var old = tree.count('//heading[position()='+(h1)+']/preceding-sibling::subheading');
+      var h2  = i - old;
+      return h1 + '.' + h2 + '. ' + node.text();
+    });
+
   }
-}
 
   return this;
 })();
