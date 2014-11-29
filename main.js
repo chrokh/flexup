@@ -38,7 +38,7 @@ var Main = (function(){
         "//head"    : "h1",
         ""          : "p"
       }))
-      .out('foo');
+      .stdout();
       /*.pipe(Flexup.interpretation("html-wrap"))
       .out("./[numbered].html");*/
   }

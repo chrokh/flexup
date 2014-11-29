@@ -28,9 +28,13 @@ module.exports = (function(){
     return this;
   }
 
+  In.prototype.stdout = function(){
+    console.log(this._tree.toXML());
+  }
+
   In.prototype.out = function(filepath){
     // write to file
-    console.log(this._tree.toXML());
+    throw "TODO: Not implemented yet!"
   }
 
 
